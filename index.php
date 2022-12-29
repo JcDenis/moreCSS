@@ -14,8 +14,6 @@ if (!defined('DC_CONTEXT_ADMIN')) { return; }
 
 $page_title = __('Style sheet');
 
-$p_url = 'plugin.php?p=' . basename(dirname(__FILE__));
-
 $config = array();
 $s =& dcCore::app()->blog->settings->themes;
 
@@ -36,7 +34,7 @@ if (isset($_POST['file_content'])) {
 	$css_min = str_replace(array(' , ',' ,',', '),',', $css_min);
 	$s->put('morecss_min',base64_encode($css_min));
 	
-	http::redirect($p_url.'&config=1');
+	http::redirect(dcCore::app()->admin->getPageURL().'&config=1');
 	} catch (Exception $e) {
 		dcCore::app()->error->add($e->getMessage());
 	}
@@ -48,13 +46,13 @@ $css_content = base64_decode($s->morecss);
 <html>
 <head>
   <title><?php echo $page_title; ?></title>
-  <script type="text/javascript">
-  <?php echo dcPage::jsVar('dotclear.msg.saving_document',__("Saving document...")); ?>
-  <?php echo dcPage::jsVar('dotclear.msg.document_saved',__("Document saved")); ?>
-  <?php echo dcPage::jsVar('dotclear.msg.error_occurred',__("An error occurred:")); ?>
+  <script>
+  <?php echo dcPage::jsJson('dotclear.msg.saving_document',__("Saving document...")); ?>
+  <?php echo dcPage::jsJson('dotclear.msg.document_saved',__("Document saved")); ?>
+  <?php echo dcPage::jsJson('dotclear.msg.error_occurred',__("An error occurred:")); ?>
   </script>
 	<?php echo dcPage::jsConfirmClose('file-form'); ?>
-  <script type="text/javascript" src="index.php?pf=moreCSS/script.js"></script>
+  <script src="index.php?pf=moreCSS/script.js"></script>
 </head>
 <body>
 <?php
@@ -68,7 +66,7 @@ $css_content = base64_decode($s->morecss);
 
 <?php
 echo
-'<form action="'.$p_url.'" id="file-form" method="post">'.
+'<form action="'.dcCore::app()->admin->getPageURL().'" id="file-form" method="post">'.
 
 '<div>'.
 	'<p><label for="file_content">'.__('Style sheet:').'</label></p>'.

@@ -16,7 +16,7 @@ dcCore::app()->addBehavior('publicHeadContent',array('moreCSSpublicBehaviors','s
 
 class moreCSSpublicBehaviors
 {
-	public static function stylesheet($core)
+	public static function stylesheet()
 	{
 		$css = base64_decode(dcCore::app()->blog->settings->themes->morecss_min);
 		
