@@ -47,9 +47,9 @@ $css_content = base64_decode($s->morecss);
 <head>
   <title><?php echo $page_title; ?></title>
   <script>
-  <?php echo dcPage::jsJson('dotclear.msg.saving_document',__("Saving document...")); ?>
-  <?php echo dcPage::jsJson('dotclear.msg.document_saved',__("Document saved")); ?>
-  <?php echo dcPage::jsJson('dotclear.msg.error_occurred',__("An error occurred:")); ?>
+  <?php echo dcPage::jsVar('dotclear.msg.saving_document',__("Saving document...")); ?>
+  <?php echo dcPage::jsVar('dotclear.msg.document_saved',__("Document saved")); ?>
+  <?php echo dcPage::jsVar('dotclear.msg.error_occurred',__("An error occurred:")); ?>
   </script>
 	<?php echo dcPage::jsConfirmClose('file-form'); ?>
   <script src="index.php?pf=moreCSS/script.js"></script>
