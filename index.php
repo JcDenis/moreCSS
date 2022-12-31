@@ -1,82 +1,95 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of moreCSS a plugin for Dotclear 2.
-#
-# Copyright (c) 2011 2018 Osku and contributors
-#
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_CONTEXT_ADMIN')) { return; }
-
-$page_title = __('Style sheet');
-
-$config = array();
-$s =& dcCore::app()->blog->settings->themes;
-
-if (isset($_POST['file_content'])) {
-	try {
-	// Save CSS
-	$css = base64_encode($_POST['file_content']);
-	$s->put('morecss',$css);
-	
-	// Minify it
-	$css_min = preg_replace('` {2,}`', ' ', $_POST['file_content']);
-	$css_min = preg_replace('/(\/\*[\s\S]*?\*\/)/', '', $css_min);
-	$css_min = preg_replace('/(\t|\r|\n)/', '', $css_min);
-	$css_min = str_replace(array(' { ',' {','{ '),'{', $css_min);
-	$css_min = str_replace(array(' } ',' }','} '),'}', $css_min);
-	$css_min = str_replace(array(' : ',' :',': '),':', $css_min);
-	$css_min = str_replace(array(' ; ',' ;','; '),';', $css_min);
-	$css_min = str_replace(array(' , ',' ,',', '),',', $css_min);
-	$s->put('morecss_min',base64_encode($css_min));
-	
-	http::redirect(dcCore::app()->admin->getPageURL().'&config=1');
-	} catch (Exception $e) {
-		dcCore::app()->error->add($e->getMessage());
-	}
+/**
+ * @brief moreCSS, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Osku and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return null;
 }
 
-$css_content = base64_decode($s->morecss);
+dcPage::check(dcCore::app()->auth->makePermissions([
+    dcAuth::PERMISSION_CONTENT_ADMIN,
+]));
 
-?>
-<html>
-<head>
-  <title><?php echo $page_title; ?></title>
-  <script>
-  <?php echo dcPage::jsVar('dotclear.msg.saving_document',__("Saving document...")); ?>
-  <?php echo dcPage::jsVar('dotclear.msg.document_saved',__("Document saved")); ?>
-  <?php echo dcPage::jsVar('dotclear.msg.error_occurred',__("An error occurred:")); ?>
-  </script>
-	<?php echo dcPage::jsConfirmClose('file-form'); ?>
-  <script src="index.php?pf=moreCSS/script.js"></script>
-</head>
-<body>
-<?php
-	echo dcPage::breadcrumb(
-		array(
-			html::escapeHTML(dcCore::app()->blog->name) => '',
-			'<span class="page-title">'.$page_title.'</span>' => ''
-		));
+$s = dcCore::app()->blog->settings->get('themes');
 
-?>
+if (isset($_POST['morecss'])) {
+    try {
+        // Save CSS
+        $css = base64_encode($_POST['morecss']);
+        $s->put('morecss', $css);
+        $s->put('morecss_active', !empty($_POST['morecss_active']));
 
-<?php
-echo
-'<form action="'.dcCore::app()->admin->getPageURL().'" id="file-form" method="post">'.
+        // Minify it
+        $css_min = preg_replace('` {2,}`', ' ', $_POST['morecss']);
+        $css_min = preg_replace('/(\/\*[\s\S]*?\*\/)/', '', $css_min);
+        $css_min = preg_replace('/(\t|\r|\n)/', '', $css_min);
+        $css_min = str_replace([' { ', ' {', '{ '], '{', $css_min);
+        $css_min = str_replace([' } ', ' }', '} '], '}', $css_min);
+        $css_min = str_replace([' : ', ' :', ': '], ':', $css_min);
+        $css_min = str_replace([' ; ', ' ;', '; '], ';', $css_min);
+        $css_min = str_replace([' , ', ' ,', ', '], ',', $css_min);
+        $s->put('morecss_min', base64_encode($css_min));
 
-'<div>'.
-	'<p><label for="file_content">'.__('Style sheet:').'</label></p>'.
-	'<p>'.form::textarea('file_content',60,20,html::escapeHTML($css_content),'maximal','').'</p>'.
-'</div><p>'.form::hidden('p','moreCSS').
-	dcCore::app()->formNonce().
-	'<input type="submit" name="write" value="'.__('Save').' (s)" accesskey="s" /></p>
+        dcAdminNotices::addSuccessNotice(
+            __('Configuration successfully updated.')
+        );
+        dcCore::app()->adminurl->redirect(
+            'admin.plugin.' . basename(__DIR__)
+        );
+    } catch (Exception $e) {
+        dcCore::app()->error->add($e->getMessage());
+    }
+}
+
+echo '
+<html><head><title>' . __('Style sheet') . '</title>';
+if (dcCore::app()->auth->user_prefs->interface->colorsyntax) {
+    echo
+    dcPage::jsJson('dotclear_colorsyntax', ['colorsyntax' => dcCore::app()->auth->user_prefs->interface->colorsyntax]) .
+    dcPage::jsLoadCodeMirror(dcCore::app()->auth->user_prefs->interface->colorsyntax_theme);
+}
+echo '
+</head><body>' .
+dcPage::breadcrumb([
+    html::escapeHTML(dcCore::app()->blog->name) => '',
+    __('Style sheet')                           => '',
+]) .
+dcPage::notices() . '
+
+<form action="' . dcCore::app()->admin->getPageURL() . '" id="file-form" method="post">
+
+<div><h3><label for="morecss">' . __('Style sheet:') . '</strong></label></h3>
+<p>' . form::textarea('morecss', 72, 25, [
+    'default' => html::escapeHTML((string) base64_decode((string) $s->get('morecss'))),
+    'class'   => 'maximal',
+]) . '</p>
+
+<p><label class="classic" for="morecss_active">' .
+form::checkbox('morecss_active', 1, $s->get('morecss_active')) . ' ' .
+__('Enable additionnal CSS for the active theme') .
+'</label></p>
+
+<p>' .
+form::hidden('p', 'moreCSS') .
+dcCore::app()->formNonce() . '
+<input type="submit" name="write" value="' . __('Save') . ' (s)" accesskey="s" /></p>
 </form>';
 
-?>
+if (dcCore::app()->auth->user_prefs->interface->colorsyntax) {
+    echo
+    dcPage::jsJson('theme_editor_mode', ['mode' => 'css']) .
+    dcPage::jsModuleLoad('themeEditor/js/mode.js') .
+    dcPage::jsRunCodeMirror('editor', 'morecss', 'dotclear', dcCore::app()->auth->user_prefs->interface->colorsyntax_theme);
+}
 
+echo '
 </body>
-</html>
+</html>';

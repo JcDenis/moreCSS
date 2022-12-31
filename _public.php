@@ -1,29 +1,30 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of moreCSS a plugin for Dotclear 2.
-#
-# Copyright (c) 2011 2018 Osku and contributors
-#
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_RC_PATH')) { return; }
-
-dcCore::app()->addBehavior('publicHeadContent',array('moreCSSpublicBehaviors','stylesheet'));
-
-class moreCSSpublicBehaviors
-{
-	public static function stylesheet()
-	{
-		$css = base64_decode(dcCore::app()->blog->settings->themes->morecss_min);
-		
-		if ($css != '') {
-			echo
-			"\n<!-- Additionnal CSS --> \n".
-			'<style type="text/css">'."\n". $css ."\n".'</style>'."\n";
-		}
-	}
+/**
+ * @brief moreCSS, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Osku and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_RC_PATH')) {
+    return null;
 }
+
+if (!dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
+    return null;
+}
+
+dcCore::app()->addBehavior('publicHeadContent', function () {
+    $css = (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
+    if (!empty($css)) {
+        echo dcUtils::cssLoad(
+            dcCore::app()->blog->url . dcCore::app()->url->getURLFor(basename(__DIR__)),
+            'screen',
+            md5($css) //no cache on content change
+        );
+    }
+});

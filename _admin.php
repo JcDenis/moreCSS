@@ -1,34 +1,33 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of moreCSS a plugin for Dotclear 2.
-# 
-# Copyright (c) 2011-2018 Osku and contributors
-#
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
+/**
+ * @brief moreCSS, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Osku and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (!defined('DC_CONTEXT_ADMIN')) {
-    return;
+    return null;
 }
 
 dcCore::app()->menu[dcAdmin::MENU_BLOG]->addItem(
     __('Style sheet'),
-    dcCore::app()->adminurl->get('admin.plugin.moreCSS'),
-    [dcPage::getPF('moreCSS/icon.png')],
-    preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.moreCSS')) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
+    dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+    [dcPage::getPF(basename(__DIR__) . '/icon.png')],
+    preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
     dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_CONTENT_ADMIN]), dcCore::app()->blog->id)
 );
 
-/* Register favorite */
 dcCore::app()->addBehavior('adminDashboardFavoritesV2', function (dcFavorites $favs) {
-    $favs->register('moreCSS', [
+    $favs->register(basename(__DIR__), [
         'title'       => __('Style sheet'),
-        'url'         => dcCore::app()->adminurl->get('admin.plugin.moreCSS'),
-        'small-icon'  => [dcPage::getPF('moreCSS/icon.png')],
-        'large-icon'  => [dcPage::getPF('moreCSS/icon-big.png')],
+        'url'         => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+        'small-icon'  => [dcPage::getPF(basename(__DIR__) . '/icon.png')],
+        'large-icon'  => [dcPage::getPF(basename(__DIR__) . '/icon-big.png')],
         'permissions' => dcCore::app()->auth->makePermissions([dcAuth::PERMISSION_CONTENT_ADMIN]),
     ]);
 });

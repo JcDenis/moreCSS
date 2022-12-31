@@ -1,34 +1,35 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of moreCSS a plugin for Dotclear 2.
-# 
-# Copyright (c) 2011-2018 Osku and contributors
-#
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_CONTEXT_ADMIN')) { exit; }
- 
-if (version_compare(DC_VERSION,'2.6','<')) {
-	dcCore::app()->error->add(sprintf(__('Dotclear version 2.6 minimum is required. moreCSS is deactivated.')));
-	dcCore::app()->plugins->deactivateModule('moreCSS');
-	return false;
+/**
+ * @brief moreCSS, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Osku and contributors
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return null;
 }
 
-$new_version = dcCore::app()->plugins->moduleInfo('moreCSS','version');
- 
-$current_version = dcCore::app()->getVersion('moreCSS');
- 
-if (version_compare($current_version,$new_version,'>=')) {
-	return;
+try {
+    if (!dcCore::app()->newVersion(
+        basename(__DIR__),
+        dcCore::app()->plugins->moduleInfo(basename(__DIR__), 'version')
+    )) {
+        return null;
+    }
+
+    $s = dcCore::app()->blog->settings->get('themes');
+    $s->put('morecss_active', true, 'boolean', 'Enable additionnal CSS for the active theme', false, true);
+    $s->put('morecss', '', 'string', 'Additionnal CSS for the active theme', false, true);
+    $s->put('morecss_min', '', 'string', 'Minified addtionnal CSS for the active theme', false, true);
+
+    return true;
+} catch (Exception $e) {
+    dcCore::app()->error->add($e->getMessage());
 }
 
-$s =& dcCore::app()->blog->settings->themes;
-$s->put('morecss','','string','Additionnal css for the active theme',true,true);
-$s->put('morecss_min','','string','Minified addtionnal css for the active theme',true,true);
-
-dcCore::app()->setVersion('moreCSS',$new_version);
-return true;
+return false;

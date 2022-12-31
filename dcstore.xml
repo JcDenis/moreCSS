@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<modules xmlns:da="http://dotaddict.org/da/">
+  <module id="moreCSS">
+    <name>Style sheet</name>
+    <version>2.0</version>
+    <author>Osku and contributors</author>
+    <desc>Another CSS stylesheet for the active theme</desc>
+    <file>https://github.com/JcDenis/moreCSS/releases/download/v2.0/plugin-moreCSS.zip</file>
+    <da:dcmin>2.24</da:dcmin>
+    <da:details>https://plugins.dotaddict.org/dc2/details/moreCSS</da:details>
+    <da:support>http://forum.dotclear.org/viewtopic.php?id=44908</da:support>
+  </module>
+</modules>
