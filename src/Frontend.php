@@ -10,21 +10,40 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+declare(strict_types=1);
 
-if (!dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
-    return null;
-}
+namespace Dotclear\Plugin\moreCSS;
 
-dcCore::app()->addBehavior('publicHeadContent', function () {
-    $css = (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
-    if (!empty($css)) {
-        echo dcUtils::cssLoad(
-            dcCore::app()->blog->url . dcCore::app()->url->getURLFor(basename(__DIR__)),
-            'screen',
-            md5($css) //no cache on content change
-        );
+use dcCore;
+use dcNsProcess;
+use dcUtils;
+
+class Frontend extends dcNsProcess
+{
+    public static function init(): bool
+    {
+        static::$init = defined('DC_RC_PATH');
+
+        return static::$init;
     }
-});
+
+    public static function process(): bool
+    {
+        if (!static::$init || !dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
+            return false;
+        }
+
+        dcCore::app()->addBehavior('publicHeadContent', function (): void {
+            $css = (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
+            if (!empty($css)) {
+                echo dcUtils::cssLoad(
+                    dcCore::app()->blog->url . dcCore::app()->url->getURLFor(My::id()),
+                    'screen',
+                    md5($css) //no cache on content change
+                );
+            }
+        });
+
+        return true;
+    }
+}

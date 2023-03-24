@@ -10,20 +10,42 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+declare(strict_types=1);
 
-dcCore::app()->url->register(
-    basename(__DIR__),
-    'morecss.css',
-    '^morecss\.css(.*?)$',
-    function ($args) {
-        header('Content-Type: text/css; charset=UTF-8');
+namespace Dotclear\Plugin\moreCSS;
 
-        echo "/* CSS for plugin moreCss */ \n";
-        echo (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
+use dcCore;
+use dcNsProcess;
 
-        exit;
+class Prepend extends dcNsProcess
+{
+    public static function init(): bool
+    {
+        static::$init = defined('DC_RC_PATH');
+
+        return static::$init;
     }
-);
+
+    public static function process(): bool
+    {
+        if (!static::$init) {
+            return false;
+        }
+
+        dcCore::app()->url->register(
+            My::id(),
+            'morecss.css',
+            '^morecss\.css(.*?)$',
+            function (string $args): void {
+                header('Content-Type: text/css; charset=UTF-8');
+
+                echo "/* CSS for plugin moreCss */ \n";
+                echo (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
+
+                exit;
+            }
+        );
+
+        return true;
+    }
+}
