@@ -18,15 +18,15 @@ $this->registerModule(
     'Style sheet',
     'Another CSS stylesheet for the active theme',
     'Osku and contributors',
-    '2.0',
+    '2.1',
     [
-        'requires'    => [['core', '2.24']],
+        'requires'    => [['core', '2.26']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_CONTENT_ADMIN,
         ]),
-        'type'        => 'plugin',
-        'support'     => 'http://forum.dotclear.org/viewtopic.php?id=44908',
-        'details'     => 'https://plugins.dotaddict.org/dc2/details/' . basename(__DIR__),
-        'repository'  => 'https://raw.githubusercontent.com/JcDenis/' . basename(__DIR__) . '/master/dcstore.xml',
+        'type'       => 'plugin',
+        'support'    => 'http://forum.dotclear.org/viewtopic.php?id=44908',
+        'details'    => 'https://plugins.dotaddict.org/dc2/details/' . basename(__DIR__),
+        'repository' => 'https://raw.githubusercontent.com/JcDenis/' . basename(__DIR__) . '/master/dcstore.xml',
     ]
 );

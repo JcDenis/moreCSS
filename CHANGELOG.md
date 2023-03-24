@@ -1,3 +1,7 @@
+2.1 - 2023.03.24
+* require dotclear 2.26
+* use namespace
+
 2.0 - 2022.12.31
 * use URL for style sheet
 * use color synthax for edition
