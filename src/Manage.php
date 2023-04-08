@@ -18,9 +18,17 @@ use dcAuth;
 use dcCore;
 use dcNsProcess;
 use dcPage;
+use Dotclear\Helper\Html\Form\{
+    Checkbox,
+    Form,
+    Hidden,
+    Label,
+    Para,
+    Submit,
+    Textarea
+};
+use Dotclear\Helper\Html\Html;
 use Exception;
-use html;
-use form;
 
 class Manage extends dcNsProcess
 {
@@ -94,29 +102,26 @@ class Manage extends dcNsProcess
 
         echo
         dcPage::breadcrumb([
-            html::escapeHTML(dcCore::app()->blog->name) => '',
+            Html::escapeHTML(dcCore::app()->blog->name) => '',
             My::name()                                  => '',
         ]) .
-        dcPage::notices() . '
+        dcPage::notices() .
 
-        <form action="' . dcCore::app()->admin->getPageURL() . '" id="file-form" method="post">
-
-        <div><h3><label for="morecss">' . __('Style sheet:') . '</strong></label></h3>
-        <p>' . form::textarea('morecss', 72, 25, [
-            'default' => html::escapeHTML((string) base64_decode((string) $s->get('morecss'))),
-            'class'   => 'maximal',
-        ]) . '</p>
-
-        <p><label class="classic" for="morecss_active">' .
-        form::checkbox('morecss_active', 1, $s->get('morecss_active')) . ' ' .
-        __('Enable additionnal CSS for the active theme') .
-        '</label></p>
-
-        <p>' .
-        form::hidden('p', 'moreCSS') .
-        dcCore::app()->formNonce() . '
-        <input type="submit" name="write" value="' . __('Save') . ' (s)" accesskey="s" /></p>
-        </form>';
+        (new Form('file-form'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
+            (new Para())->items([
+                (new Label(__('Style sheet:')))->for('morecss'),
+                (new Textarea('morecss', Html::escapeHTML((string) base64_decode((string) $s->get('morecss')))))->class('maximal')->cols(72)->rows(25),
+            ]),
+            (new Para())->items([
+                (new Checkbox('morecss_active'))->value(1),
+                (new Label(__('Enable additionnal CSS for the active theme'), Label::OUTSIDE_LABEL_AFTER))->for('morecss_active')->class('classic'),
+            ]),
+            (new Para())->items([
+                dcCore::app()->formNonce(false),
+                (new Hidden('p', 'moreCSS')),
+                (new Submit(['write']))->value(__('Save') . ' (s)')->accesskey('s'),
+            ]),
+        ])->render();
 
         if (dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax')) {
             echo
