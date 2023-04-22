@@ -37,6 +37,9 @@ class Prepend extends dcNsProcess
             'morecss.css',
             '^morecss\.css(.*?)$',
             function (string $args): void {
+                if (is_null(dcCore::app()->blog)) {
+                    return;
+                }
                 header('Content-Type: text/css; charset=UTF-8');
 
                 echo "/* CSS for plugin moreCss */ \n";

@@ -29,11 +29,14 @@ class Frontend extends dcNsProcess
 
     public static function process(): bool
     {
-        if (!static::$init || !dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
+        if (!static::$init || is_null(dcCore::app()->blog) || !dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
             return false;
         }
 
         dcCore::app()->addBehavior('publicHeadContent', function (): void {
+            if (is_null(dcCore::app()->blog)) {
+                return;
+            }
             $css = (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
             if (!empty($css)) {
                 echo dcUtils::cssLoad(

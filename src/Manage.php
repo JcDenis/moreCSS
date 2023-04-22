@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\moreCSS;
 
-use dcAuth;
 use dcCore;
 use dcNsProcess;
 use dcPage;
@@ -35,8 +34,9 @@ class Manage extends dcNsProcess
     public static function init(): bool
     {
         static::$init = defined('DC_CONTEXT_ADMIN')
+            && !is_null(dcCore::app()->auth) && !is_null(dcCore::app()->blog)
             && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-                dcAuth::PERMISSION_CONTENT_ADMIN,
+                dcCore::app()->auth::PERMISSION_CONTENT_ADMIN,
             ]), dcCore::app()->blog->id);
 
         return static::$init;
@@ -44,7 +44,7 @@ class Manage extends dcNsProcess
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!static::$init || is_null(dcCore::app()->blog) || is_null(dcCore::app()->adminurl)) {
             return false;
         }
 
@@ -58,15 +58,15 @@ class Manage extends dcNsProcess
                 $s->put('morecss_active', !empty($_POST['morecss_active']));
 
                 // Minify it
-                $css_min = preg_replace('` {2,}`', ' ', $_POST['morecss']);
-                $css_min = preg_replace('/(\/\*[\s\S]*?\*\/)/', '', $css_min);
-                $css_min = preg_replace('/(\t|\r|\n)/', '', $css_min);
+                $css_min = (string) preg_replace('` {2,}`', ' ', $_POST['morecss']);
+                $css_min = (string) preg_replace('/(\/\*[\s\S]*?\*\/)/', '', $css_min);
+                $css_min = (string) preg_replace('/(\t|\r|\n)/', '', $css_min);
                 $css_min = str_replace([' { ', ' {', '{ '], '{', $css_min);
                 $css_min = str_replace([' } ', ' }', '} '], '}', $css_min);
                 $css_min = str_replace([' : ', ' :', ': '], ':', $css_min);
                 $css_min = str_replace([' ; ', ' ;', '; '], ';', $css_min);
                 $css_min = str_replace([' , ', ' ,', ', '], ',', $css_min);
-                $s->put('morecss_min', is_string($css_min) ? base64_encode($css_min) : '');
+                $s->put('morecss_min', base64_encode($css_min));
 
                 dcPage::addSuccessNotice(
                     __('Configuration successfully updated.')
@@ -84,7 +84,7 @@ class Manage extends dcNsProcess
 
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!static::$init || is_null(dcCore::app()->auth) || is_null(dcCore::app()->auth->user_prefs) || is_null(dcCore::app()->blog)) {
             return;
         }
 
@@ -113,7 +113,7 @@ class Manage extends dcNsProcess
                 (new Textarea('morecss', Html::escapeHTML((string) base64_decode((string) $s->get('morecss')))))->class('maximal')->cols(72)->rows(25),
             ]),
             (new Para())->items([
-                (new Checkbox('morecss_active'))->value(1),
+                (new Checkbox('morecss_active', (bool) $s->get('morecss_active')))->value(1),
                 (new Label(__('Enable additionnal CSS for the active theme'), Label::OUTSIDE_LABEL_AFTER))->for('morecss_active')->class('classic'),
             ]),
             (new Para())->items([

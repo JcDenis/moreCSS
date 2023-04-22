@@ -30,7 +30,7 @@ class Install extends dcNsProcess
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!static::$init || is_null(dcCore::app()->blog)) {
             return false;
         }
 
