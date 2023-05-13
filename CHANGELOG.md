@@ -1,3 +1,7 @@
+2.2.1 - 2023.05.13
+* require dotclear 2.26
+* cleanup for dc2.26 stable
+
 2.2 - 2023.04.22
 * require dotclear 2.26
 * add plugin Uninstaller features
