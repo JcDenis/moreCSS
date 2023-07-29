@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/JcDenis/moreCSS)](https://github.com/JcDenis/moreCSS/releases)
 [![Date](https://img.shields.io/github/release-date/JcDenis/moreCSS)](https://github.com/JcDenis/moreCSS/releases)
 [![Issues](https://img.shields.io/github/issues/JcDenis/moreCSS)](https://github.com/JcDenis/moreCSS/issues)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.26-blue.svg)](https://fr.dotclear.org/download)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.27-blue.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/moreCSS)
 [![License](https://img.shields.io/github/license/JcDenis/moreCSS)](https://github.com/JcDenis/moreCSS/blob/master/LICENSE)
 
@@ -19,8 +19,9 @@ without editing it.
 
  _moreCSS_ requires: 
 
-  * content admin permissions to manage CSS
-  * Dotclear 2.26
+ * content admin permissions to manage CSS
+ * Dotclear 2.27
+ * PHP 7.4+
 
 ## USAGE
 

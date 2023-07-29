@@ -15,8 +15,11 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\moreCSS;
 
 use dcCore;
-use dcNsProcess;
-use dcPage;
+use Dotclear\Core\Process;
+use Dotclear\Core\Backend\{
+    Notices,
+    Page
+};
 use Dotclear\Helper\Html\Form\{
     Checkbox,
     Form,
@@ -29,22 +32,16 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
-class Manage extends dcNsProcess
+class Manage extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && !is_null(dcCore::app()->auth) && !is_null(dcCore::app()->blog)
-            && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-                dcCore::app()->auth::PERMISSION_CONTENT_ADMIN,
-            ]), dcCore::app()->blog->id);
-
-        return static::$init;
+        return self::status(My::checkContext(My::MANAGE));
     }
 
     public static function process(): bool
     {
-        if (!static::$init || is_null(dcCore::app()->blog) || is_null(dcCore::app()->adminurl)) {
+        if (!self::status()) {
             return false;
         }
 
@@ -68,12 +65,10 @@ class Manage extends dcNsProcess
                 $css_min = str_replace([' , ', ' ,', ', '], ',', $css_min);
                 $s->put('morecss_min', base64_encode($css_min));
 
-                dcPage::addSuccessNotice(
+                Notices::addSuccessNotice(
                     __('Configuration successfully updated.')
                 );
-                dcCore::app()->adminurl->redirect(
-                    'admin.plugin.' . My::id()
-                );
+                My::redirect();
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
@@ -84,28 +79,28 @@ class Manage extends dcNsProcess
 
     public static function render(): void
     {
-        if (!static::$init || is_null(dcCore::app()->auth) || is_null(dcCore::app()->auth->user_prefs) || is_null(dcCore::app()->blog)) {
+        if (!self::status()) {
             return;
         }
 
         $s = dcCore::app()->blog->settings->get('themes');
 
-        dcPage::openModule(
+        Page::openModule(
             My::name(),
             (
                 dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax') ?
-                dcPage::jsJson('dotclear_colorsyntax', ['colorsyntax' => dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax')]) .
-                dcPage::jsLoadCodeMirror(dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax_theme'))
+                Page::jsJson('dotclear_colorsyntax', ['colorsyntax' => dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax')]) .
+                Page::jsLoadCodeMirror(dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax_theme'))
                 : ''
             )
         );
 
         echo
-        dcPage::breadcrumb([
+        Page::breadcrumb([
             Html::escapeHTML(dcCore::app()->blog->name) => '',
             My::name()                                  => '',
         ]) .
-        dcPage::notices() .
+        Notices::getNotices() .
 
         (new Form('file-form'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
             (new Para())->items([
@@ -125,11 +120,11 @@ class Manage extends dcNsProcess
 
         if (dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax')) {
             echo
-            dcPage::jsJson('theme_editor_mode', ['mode' => 'css']) .
-            dcPage::jsModuleLoad('themeEditor/js/mode.js') .
-            dcPage::jsRunCodeMirror('editor', 'morecss', 'dotclear', dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax_theme'));
+            Page::jsJson('theme_editor_mode', ['mode' => 'css']) .
+            Page::jsLoad(dcCore::app()->blog->getPF('themeEditor/js/mode.js')) .
+            Page::jsRunCodeMirror('editor', 'morecss', 'dotclear', dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax_theme'));
         }
 
-        dcPage::closeModule();
+        Page::closeModule();
     }
 }

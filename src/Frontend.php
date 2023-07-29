@@ -15,28 +15,23 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\moreCSS;
 
 use dcCore;
-use dcNsProcess;
 use dcUtils;
+use Dotclear\Core\Process;
 
-class Frontend extends dcNsProcess
+class Frontend extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_RC_PATH');
-
-        return static::$init;
+        return self::status(My::checkContext(My::FRONTEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init || is_null(dcCore::app()->blog) || !dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
+        if (!self::status() || !dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
             return false;
         }
 
         dcCore::app()->addBehavior('publicHeadContent', function (): void {
-            if (is_null(dcCore::app()->blog)) {
-                return;
-            }
             $css = (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
             if (!empty($css)) {
                 echo dcUtils::cssLoad(

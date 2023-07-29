@@ -1,3 +1,9 @@
+2.3 - 2023.07.29
+* require Dotclear 2.27
+* require PHP 7.4+
+* use new svg icon
+* update to Dotclear 2.27-dev
+
 2.2.1 - 2023.05.13
 * require dotclear 2.26
 * cleanup for dc2.26 stable
