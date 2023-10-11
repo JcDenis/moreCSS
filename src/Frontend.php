@@ -1,23 +1,20 @@
 <?php
-/**
- * @brief moreCSS, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Osku and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\moreCSS;
 
-use dcCore;
-use dcUtils;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
+/**
+ * @brief   moreCSS frontend class.
+ * @ingroup moreCSS
+ *
+ * @author      Osku (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Frontend extends Process
 {
     public static function init(): bool
@@ -27,15 +24,15 @@ class Frontend extends Process
 
     public static function process(): bool
     {
-        if (!self::status() || !dcCore::app()->blog->settings->get('themes')->get('morecss_active')) {
+        if (!self::status() || !App::blog()->settings()->get('themes')->get('morecss_active')) {
             return false;
         }
 
-        dcCore::app()->addBehavior('publicHeadContent', function (): void {
-            $css = (string) base64_decode((string) dcCore::app()->blog->settings->get('themes')->get('morecss_min'));
+        App::behavior()->addBehavior('publicHeadContent', function (): void {
+            $css = (string) base64_decode((string) App::blog()->settings()->get('themes')->get('morecss_min'));
             if (!empty($css)) {
-                echo dcUtils::cssLoad(
-                    dcCore::app()->blog->url . dcCore::app()->url->getURLFor(My::id()),
+                echo App::plugins()->cssLoad(
+                    App::blog()->url() . App::url()->getURLFor(My::id()),
                     'screen',
                     md5($css) //no cache on content change
                 );

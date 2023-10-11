@@ -1,20 +1,10 @@
 <?php
-/**
- * @brief moreCSS, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Osku and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\moreCSS;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\{
     Notices,
@@ -32,6 +22,14 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
+/**
+ * @brief   moreCSS manage class.
+ * @ingroup moreCSS
+ *
+ * @author      Osku (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Manage extends Process
 {
     public static function init(): bool
@@ -45,7 +43,7 @@ class Manage extends Process
             return false;
         }
 
-        $s = dcCore::app()->blog->settings->get('themes');
+        $s = App::blog()->settings()->get('themes');
 
         if (isset($_POST['morecss'])) {
             try {
@@ -70,7 +68,7 @@ class Manage extends Process
                 );
                 My::redirect();
             } catch (Exception $e) {
-                dcCore::app()->error->add($e->getMessage());
+                App::error()->add($e->getMessage());
             }
         }
 
@@ -83,26 +81,26 @@ class Manage extends Process
             return;
         }
 
-        $s = dcCore::app()->blog->settings->get('themes');
+        $s = App::blog()->settings()->get('themes');
 
         Page::openModule(
             My::name(),
             (
-                dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax') ?
-                Page::jsJson('dotclear_colorsyntax', ['colorsyntax' => dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax')]) .
-                Page::jsLoadCodeMirror(dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax_theme'))
+                App::auth()->prefs()->get('interface')->get('colorsyntax') ?
+                Page::jsJson('dotclear_colorsyntax', ['colorsyntax' => App::auth()->prefs()->get('interface')->get('colorsyntax')]) .
+                Page::jsLoadCodeMirror(App::auth()->prefs()->get('interface')->get('colorsyntax_theme'))
                 : ''
             )
         );
 
         echo
         Page::breadcrumb([
-            Html::escapeHTML(dcCore::app()->blog->name) => '',
-            My::name()                                  => '',
+            Html::escapeHTML(App::blog()->name()) => '',
+            My::name()                            => '',
         ]) .
         Notices::getNotices() .
 
-        (new Form('file-form'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
+        (new Form('file-form'))->method('post')->action(App::backend()->getPageURL())->fields([
             (new Para())->items([
                 (new Label(__('Style sheet:')))->for('morecss'),
                 (new Textarea('morecss', Html::escapeHTML((string) base64_decode((string) $s->get('morecss')))))->class('maximal')->cols(72)->rows(25),
@@ -112,17 +110,17 @@ class Manage extends Process
                 (new Label(__('Enable additionnal CSS for the active theme'), Label::OUTSIDE_LABEL_AFTER))->for('morecss_active')->class('classic'),
             ]),
             (new Para())->items([
-                dcCore::app()->formNonce(false),
+                App::nonce()->formNonce(),
                 (new Hidden('p', 'moreCSS')),
                 (new Submit(['write']))->value(__('Save') . ' (s)')->accesskey('s'),
             ]),
         ])->render();
 
-        if (dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax')) {
+        if (App::auth()->prefs()->get('interface')->get('colorsyntax')) {
             echo
             Page::jsJson('theme_editor_mode', ['mode' => 'css']) .
-            Page::jsLoad(dcCore::app()->blog->getPF('themeEditor/js/mode.js')) .
-            Page::jsRunCodeMirror('editor', 'morecss', 'dotclear', dcCore::app()->auth->user_prefs->get('interface')->get('colorsyntax_theme'));
+            Page::jsLoad(App::blog()->getPF('themeEditor/js/mode.js')) .
+            Page::jsRunCodeMirror('editor', 'morecss', 'dotclear', App::auth()->prefs()->get('interface')->get('colorsyntax_theme'));
         }
 
         Page::closeModule();

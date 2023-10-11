@@ -1,31 +1,34 @@
 <?php
-/**
- * @brief moreCSS, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Osku and contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\moreCSS;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Module\MyPlugin;
 
 /**
- * This module definitions.
+ * @brief   moreCSS My helper.
+ * @ingroup moreCSS
+ *
+ * @author      Osku (author)
+ * @author      Jean-Christian Denis (latest)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 class My extends MyPlugin
 {
-    public static function checkCustomContext(int $context): ?bool
+    protected static function checkCustomContext(int $context): ?bool
     {
-        return in_array($context, [My::BACKEND, My::MENU]) ?
-            dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([dcCore::app()->auth::PERMISSION_CONTENT_ADMIN]), dcCore::app()->blog->id)
-            : null;
+        return match ($context) {
+            // Allow BACKEND and MANAGE and MENU to also content admin
+            self::MANAGE, self::MENU => App::task()->checkContext('BACKEND')
+                && App::blog()->isDefined()
+                && App::auth()->check(App::auth()->makePermissions([
+                    App::auth()::PERMISSION_ADMIN,
+                    App::auth()::PERMISSION_CONTENT_ADMIN,
+                ]), App::blog()->id()),
+
+            default => null,
+        };
     }
 }
