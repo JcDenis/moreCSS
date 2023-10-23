@@ -23,8 +23,8 @@ use Dotclear\Helper\Html\Html;
 use Exception;
 
 /**
- * @brief   moreCSS manage class.
- * @ingroup moreCSS
+ * @brief       moreCSS manage class.
+ * @ingroup     moreCSS
  *
  * @author      Osku (author)
  * @author      Jean-Christian Denis (latest)

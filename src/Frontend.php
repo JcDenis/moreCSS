@@ -8,8 +8,8 @@ use Dotclear\App;
 use Dotclear\Core\Process;
 
 /**
- * @brief   moreCSS frontend class.
- * @ingroup moreCSS
+ * @brief       moreCSS frontend class.
+ * @ingroup     moreCSS
  *
  * @author      Osku (author)
  * @author      Jean-Christian Denis (latest)

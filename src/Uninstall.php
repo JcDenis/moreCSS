@@ -8,8 +8,8 @@ use Dotclear\Core\Process;
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
 /**
- * @brief   moreCSS uninstall class.
- * @ingroup moreCSS
+ * @brief       moreCSS uninstall class.
+ * @ingroup     moreCSS
  *
  * @author      Osku (author)
  * @author      Jean-Christian Denis (latest)

@@ -1,7 +1,7 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-2.5.1-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/moreCSS/releases)
-![Date](https://img.shields.io/badge/date-2023.10.13-c44d58.svg)
+[![Release](https://img.shields.io/badge/release-2.5.2-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/moreCSS/releases)
+![Date](https://img.shields.io/badge/date-2023.10.23-c44d58.svg)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/moreCSS)
 [![License](https://img.shields.io/github/license/JcDenis/moreCSS)](https://git.dotclear.watch/JcDenis/moreCSS/blob/master/LICENSE)
@@ -16,7 +16,7 @@ _moreCSS_ is a plugin for the open-source web publishing software called [Dotcle
 
 * Dotclear 2.28
 * PHP 8.1+
-* content admin permissions to manage CSS
+* Dotclear content admin permissions to manage CSS
 
 ## USAGE
 

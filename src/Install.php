@@ -9,8 +9,8 @@ use Dotclear\Core\Process;
 use Exception;
 
 /**
- * @brief   moreCSS install class.
- * @ingroup moreCSS
+ * @brief       moreCSS install class.
+ * @ingroup     moreCSS
  *
  * @author      Osku (author)
  * @author      Jean-Christian Denis (latest)

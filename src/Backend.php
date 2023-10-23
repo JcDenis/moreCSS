@@ -19,8 +19,8 @@ use Dotclear\Core\Process;
 use Dotclear\Core\Backend\Favorites;
 
 /**
- * @brief   moreCSS manage class.
- * @ingroup moreCSS
+ * @brief       moreCSS manage class.
+ * @ingroup     moreCSS
  *
  * @author      Osku (author)
  * @author      Jean-Christian Denis (latest)

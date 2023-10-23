@@ -8,8 +8,8 @@ use Dotclear\App;
 use Dotclear\Module\MyPlugin;
 
 /**
- * @brief   moreCSS My helper.
- * @ingroup moreCSS
+ * @brief       moreCSS My helper.
+ * @ingroup     moreCSS
  *
  * @author      Osku (author)
  * @author      Jean-Christian Denis (latest)
@@ -20,9 +20,8 @@ class My extends MyPlugin
     protected static function checkCustomContext(int $context): ?bool
     {
         return match ($context) {
-            // Allow BACKEND and MANAGE and MENU to also content admin
+            // Add content admin perm to backend
             self::MANAGE, self::MENU => App::task()->checkContext('BACKEND')
-                && App::blog()->isDefined()
                 && App::auth()->check(App::auth()->makePermissions([
                     App::auth()::PERMISSION_ADMIN,
                     App::auth()::PERMISSION_CONTENT_ADMIN,
