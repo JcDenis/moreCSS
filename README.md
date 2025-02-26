@@ -1,10 +1,10 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-2.5.2-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/moreCSS/releases)
-![Date](https://img.shields.io/badge/date-2023.10.23-c44d58.svg)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
+[![Release](https://img.shields.io/github/v/release/jcdenis/moreCSS?color=lightblue)](https://github.com/JcDenis/moreCSS/releases)
+![Date](https://img.shields.io/github/release-date/jcdenis/moreCSS?color=red)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.33-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/moreCSS)
-[![License](https://img.shields.io/github/license/JcDenis/moreCSS)](https://git.dotclear.watch/JcDenis/moreCSS/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/jcdenis/moreCSS?color=white)](https://github.com/JcDenis/moreCSS/src/branch/master/LICENSE)
 
 ## ABOUT
 
@@ -28,10 +28,10 @@ or by adding a favorites icon on dashboard.
 
 ## LINKS
 
-* [License](https://git.dotclear.watch/JcDenis/moreCSS/src/branch/master/LICENSE)
-* [Packages & details](https://git.dotclear.watch/JcDenis/moreCSS/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/moreCSS))
-* [Sources & contributions](https://git.dotclear.watch/JcDenis/moreCSS) (or on [GitHub](https://github.com/JcDenis/moreCSS))
-* [Issues & security](https://git.dotclear.watch/JcDenis/moreCSS/issues) (or on [GitHub](https://github.com/JcDenis/moreCSS/issues))
+* [License](https://github.com/JcDenis/moreCSS/src/branch/master/LICENSE)
+* [Packages & details](https://github.com/JcDenis/moreCSS/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/moreCSS))
+* [Sources & contributions](https://github.com/JcDenis/moreCSS)
+* [Issues & security](https://github.com/JcDenis/moreCSS/issues)
 * [Discuss & help](http://forum.dotclear.org/viewtopic.php?id=44908)
 
 ## CONTRIBUTORS
