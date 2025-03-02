@@ -4,7 +4,7 @@
 ![Date](https://img.shields.io/github/release-date/jcdenis/moreCSS?color=red)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.33-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/moreCSS)
-[![License](https://img.shields.io/github/license/jcdenis/moreCSS?color=white)](https://github.com/JcDenis/moreCSS/src/branch/master/LICENSE)
+[![License](https://img.shields.io/github/license/jcdenis/moreCSS?color=white)](https://github.com/JcDenis/moreCSS/blob/master/LICENSE)
 
 ## ABOUT
 
@@ -28,7 +28,7 @@ or by adding a favorites icon on dashboard.
 
 ## LINKS
 
-* [License](https://github.com/JcDenis/moreCSS/src/branch/master/LICENSE)
+* [License](https://github.com/JcDenis/moreCSS/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/moreCSS/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/moreCSS))
 * [Sources & contributions](https://github.com/JcDenis/moreCSS)
 * [Issues & security](https://github.com/JcDenis/moreCSS/issues)
