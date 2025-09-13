@@ -43,7 +43,7 @@ class Manage
 
         $s = App::blog()->settings()->get('themes');
 
-        if (isset($_POST['morecss'])) {
+        if (isset($_POST['morecss']) && is_string($_POST['morecss'])) {
             try {
                 // Save CSS
                 $css = base64_encode($_POST['morecss']);
