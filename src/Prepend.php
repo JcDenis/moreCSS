@@ -38,7 +38,7 @@ class Prepend
                 header('Content-Type: text/css; charset=UTF-8');
 
                 echo "/* CSS for plugin moreCss */ \n";
-                echo (string) base64_decode((string) App::blog()->settings()->get('themes')->get('morecss_min'));
+                echo (string) base64_decode(App::blog()->settings()->get('themes')->getStr('morecss_min', false));
 
                 exit;
             }

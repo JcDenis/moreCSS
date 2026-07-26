@@ -31,7 +31,7 @@ class Frontend
         }
 
         App::behavior()->addBehavior('publicHeadContent', function (): void {
-            $css = (string) base64_decode((string) App::blog()->settings()->get('themes')->get('morecss_min'));
+            $css = (string) base64_decode(App::blog()->settings()->get('themes')->getStr('morecss_min', false));
             if (!empty($css)) {
                 echo App::plugins()->cssLoad(
                     App::blog()->url() . App::url()->getURLFor(My::id()),

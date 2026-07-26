@@ -45,13 +45,14 @@ class Manage
 
         if (isset($_POST['morecss']) && is_string($_POST['morecss'])) {
             try {
+                $css = $_POST['morecss'];
+
                 // Save CSS
-                $css = base64_encode($_POST['morecss']);
-                $s->put('morecss', $css);
+                $s->put('morecss', base64_encode($css));
                 $s->put('morecss_active', !empty($_POST['morecss_active']));
 
                 // Minify it
-                $css_min = (string) preg_replace('` {2,}`', ' ', $_POST['morecss']);
+                $css_min = (string) preg_replace('` {2,}`', ' ', $css);
                 $css_min = (string) preg_replace('/(\/\*[\s\S]*?\*\/)/', '', $css_min);
                 $css_min = (string) preg_replace('/(\t|\r|\n)/', '', $css_min);
                 $css_min = str_replace([' { ', ' {', '{ '], '{', $css_min);
@@ -84,9 +85,9 @@ class Manage
         Page::openModule(
             My::name(),
             (
-                App::auth()->prefs()->get('interface')->get('colorsyntax') ?
-                Page::jsJson('dotclear_colorsyntax', ['colorsyntax' => App::auth()->prefs()->get('interface')->get('colorsyntax')]) .
-                Page::jsLoadCodeMirror(App::auth()->prefs()->get('interface')->get('colorsyntax_theme'))
+                App::auth()->prefs()->get('interface')->getBool('colorsyntax', false) ?
+                Page::jsJson('dotclear_colorsyntax', ['colorsyntax' => true]) .
+                Page::jsLoadCodeMirror(App::auth()->prefs()->get('interface')->getStr('colorsyntax_theme', false))
                 : ''
             )
         );
@@ -101,10 +102,10 @@ class Manage
         (new Form('file-form'))->method('post')->action(App::backend()->getPageURL())->fields([
             (new Para())->items([
                 (new Label(__('Style sheet:')))->for('morecss'),
-                (new Textarea('morecss', Html::escapeHTML((string) base64_decode((string) $s->get('morecss')))))->class('maximal')->cols(72)->rows(25),
+                (new Textarea('morecss', Html::escapeHTML((string) base64_decode($s->getStr('morecss', false)))))->class('maximal')->cols(72)->rows(25),
             ]),
             (new Para())->items([
-                (new Checkbox('morecss_active', (bool) $s->get('morecss_active')))->value(1),
+                (new Checkbox('morecss_active', $s->getBool('morecss_active', false)))->value(1),
                 (new Label(__('Enable additionnal CSS for the active theme'), Label::OUTSIDE_LABEL_AFTER))->for('morecss_active')->class('classic'),
             ]),
             (new Para())->items([
@@ -114,11 +115,11 @@ class Manage
             ]),
         ])->render();
 
-        if (App::auth()->prefs()->get('interface')->get('colorsyntax')) {
+        if (App::auth()->prefs()->get('interface')->getBool('colorsyntax', false)) {
             echo
             Page::jsJson('theme_editor_mode', ['mode' => 'css']) .
             Page::jsLoad(App::blog()->getPF('themeEditor/js/mode.js')) .
-            Page::jsRunCodeMirror('editor', 'morecss', 'dotclear', App::auth()->prefs()->get('interface')->get('colorsyntax_theme'));
+            Page::jsRunCodeMirror('editor', 'morecss', 'dotclear', App::auth()->prefs()->get('interface')->getStr('colorsyntax_theme', false));
         }
 
         Page::closeModule();

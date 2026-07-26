@@ -41,7 +41,9 @@ class Backend
             return false;
         }
 
-        My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
+        if (is_string(App::backend()->menus()::MENU_BLOG)) {
+            My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
+        }
 
         App::behavior()->addBehavior('adminDashboardFavoritesV2', function (Favorites $favs): void {
             $favs->register(My::id(), [
