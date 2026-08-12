@@ -23,7 +23,7 @@ $this->registerModule(
     'Style sheet',
     'Another CSS stylesheet for the active theme',
     'Osku and contributors',
-    '2.6.1',
+    '2.7',
     [
         'requires'    => [['core', '2.39']],
         'permissions' => 'My',
