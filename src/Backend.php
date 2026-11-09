@@ -15,8 +15,9 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\moreCSS;
 
 use Dotclear\App;
-use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Core\Backend\Favorites;
+use Dotclear\Core\Backend\Menus;
+use Dotclear\Helper\Process\TraitProcess;
 
 /**
  * @brief       moreCSS manage class.
@@ -41,9 +42,7 @@ class Backend
             return false;
         }
 
-        if (is_string(App::backend()->menus()::MENU_BLOG)) {
-            My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
-        }
+        My::addBackendMenuItem(Menus::MENU_BLOG);
 
         App::behavior()->addBehavior('adminDashboardFavoritesV2', function (Favorites $favs): void {
             $favs->register(My::id(), [
