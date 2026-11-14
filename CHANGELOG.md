@@ -1,3 +1,10 @@
+moreCSS 2.9 - 2026.11.14
+===========================================================
+* [fix] CSS minification changed selectors and quoted strings
+* [lang] Fix typos
+* [docs] Add a user guide in French, with screenshots
+* [docs] Add the admin help in English and French
+
 moreCSS 2.8 - 2026.11.09
 ===========================================================
 * Fix compatibility with Dotclear 2.40
