@@ -12,6 +12,8 @@ _moreCSS_ is a plugin for the open-source web publishing software called [Dotcle
 
 > It helps admin to add more CSS rules to current theme without editing it.
 
+A [user guide in French](https://github.com/JcDenis/moreCSS/blob/master/docs/fr/utilisation.md) is available.
+
 ## REQUIREMENTS
 
 * Dotclear 2.39
@@ -28,6 +30,7 @@ or by adding a favorites icon on dashboard.
 
 ## LINKS
 
+* [User guide (in French)](https://github.com/JcDenis/moreCSS/blob/master/docs/fr/utilisation.md)
 * [License](https://github.com/JcDenis/moreCSS/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/moreCSS/releases) (or on [Repository](https://dotclear.org/plugin/detail/moreCSS))
 * [Sources & contributions](https://github.com/JcDenis/moreCSS)
