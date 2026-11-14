@@ -16,8 +16,8 @@ msgstr "Feuille de style"
 msgid "Style sheet:"
 msgstr "Feuille de style :"
 
-msgid "Enable additionnal CSS for the active theme"
-msgstr "Autorisation la feuille de style additionnelle pour le thème actif"
+msgid "Enable additional CSS for the active theme"
+msgstr "Activer la feuille de style additionnelle pour le thème actif"
 
 msgid "Another CSS stylesheet for the active theme"
 msgstr "Une autre feuille de style CSS pour le thème actif"

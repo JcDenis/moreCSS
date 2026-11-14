@@ -33,7 +33,7 @@ class Install
 
         try {
             $s = App::blog()->settings()->get('themes');
-            $s->put('morecss_active', true, 'boolean', 'Enable additionnal CSS for the active theme', false, true);
+            $s->put('morecss_active', true, 'boolean', 'Enable additional CSS for the active theme', false, true);
             $s->put('morecss', '', 'string', 'Additionnal CSS for the active theme', false, true);
             $s->put('morecss_min', '', 'string', 'Minified addtionnal CSS for the active theme', false, true);
 
