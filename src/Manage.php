@@ -115,6 +115,8 @@ class Manage
             Page::jsRunCodeMirror('editor', 'morecss', 'dotclear', App::auth()->prefs()->get('interface')->getStr('colorsyntax_theme', false));
         }
 
+        Page::helpBlock(My::id() . '-index');
+
         Page::closeModule();
     }
 
