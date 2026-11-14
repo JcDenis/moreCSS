@@ -52,14 +52,7 @@ class Manage
                 $s->put('morecss_active', !empty($_POST['morecss_active']));
 
                 // Minify it
-                $css_min = (string) preg_replace('` {2,}`', ' ', $css);
-                $css_min = (string) preg_replace('/(\/\*[\s\S]*?\*\/)/', '', $css_min);
-                $css_min = (string) preg_replace('/(\t|\r|\n)/', '', $css_min);
-                $css_min = str_replace([' { ', ' {', '{ '], '{', $css_min);
-                $css_min = str_replace([' } ', ' }', '} '], '}', $css_min);
-                $css_min = str_replace([' : ', ' :', ': '], ':', $css_min);
-                $css_min = str_replace([' ; ', ' ;', '; '], ';', $css_min);
-                $css_min = str_replace([' , ', ' ,', ', '], ',', $css_min);
+                $css_min = self::minify($css);
                 $s->put('morecss_min', base64_encode($css_min));
 
                 Notices::addSuccessNotice(
@@ -106,7 +99,7 @@ class Manage
             ]),
             (new Para())->items([
                 (new Checkbox('morecss_active', $s->getBool('morecss_active', false)))->value(1),
-                (new Label(__('Enable additionnal CSS for the active theme'), Label::OUTSIDE_LABEL_AFTER))->for('morecss_active')->class('classic'),
+                (new Label(__('Enable additional CSS for the active theme'), Label::OUTSIDE_LABEL_AFTER))->for('morecss_active')->class('classic'),
             ]),
             (new Para())->items([
                 App::nonce()->formNonce(),
@@ -123,5 +116,38 @@ class Manage
         }
 
         Page::closeModule();
+    }
+
+    /**
+     * Minify CSS without touching strings nor selectors.
+     *
+     * Comments are removed, spaces are reduced, and only spaces
+     * around "{", "}", ";", "," and after ":" are removed,
+     * outside quoted strings.
+     *
+     * @param   string  $css    The CSS
+     *
+     * @return  string  The minified CSS
+     */
+    private static function minify(string $css): string
+    {
+        $parts = preg_split('/("(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\'|\/\*[\s\S]*?\*\/)/', $css, -1, PREG_SPLIT_DELIM_CAPTURE);
+        if ($parts === false) {
+            return $css;
+        }
+
+        $res = '';
+        foreach ($parts as $i => $part) {
+            if ($i % 2) {
+                // Quoted string kept as is, comment removed
+                $res .= str_starts_with($part, '/*') ? '' : $part;
+            } else {
+                $part = (string) preg_replace('/\s+/', ' ', $part);
+                $part = (string) preg_replace('/\s*([{};,])\s*/', '$1', $part);
+                $res .= (string) preg_replace('/:\s+/', ':', $part);
+            }
+        }
+
+        return trim($res);
     }
 }
